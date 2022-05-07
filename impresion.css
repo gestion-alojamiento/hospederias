@@ -1,0 +1,28 @@
+body {
+	color: black;
+	background: white;
+	font-size: .9em;
+}
+
+button, h1, .menu-principal, .usuarios {
+	display: none !important;
+}
+
+.card, table tr td, table tr th {
+	page-break-inside: avoid;
+}
+
+.card-body p {
+	margin: 0.1rem 1rem;
+}
+
+.card-columns {
+		width: 100%;
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+
+.print-break {
+	page-break-before: always;
+	}
