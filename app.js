@@ -2,12 +2,14 @@ const { createApp, ref, reactive, toRefs, inject, provide, onBeforeMount, onMoun
 
   const App = {
     components: {
-      menuPrincipal
+      menuPrincipal,
+      pieDePagina
     },
     template: `
     <h1>{{ alojamiento }}</h1>
     <menu-principal />
     <router-view></router-view>
+    <pie-de-pagina />
     `,
   // En caso de querer enviar datos fuera del setup()
     provide() {
@@ -19,39 +21,50 @@ const { createApp, ref, reactive, toRefs, inject, provide, onBeforeMount, onMoun
         menuLeeme: true,
         menuAltaHuesped: false,
         menuExportarHuespedes: false,
-        menuListaHuesped: false,
-        config: {
-          debug: true
-        }
+        menuListaHuesped: false
       }
     },
     setup() {
-      // Gestión usuarios con _firebase_
+		
+		const alojamiento = Establecimiento.alias
+		const config = {
+			debug: true
+		}
+
+		
+		/*
+		 * FIREBASE AUTH
+		 * 
+		 */
+		 
+		let log = null
+		 
 		const userId = ref()
 		const adminUser = ref()
-
       firebase.auth().onAuthStateChanged((x) => {
           if (!x) { // not logged in
-            console.log('no logeado')
+            log = 'no logeado'
             userId.value = false
             adminUser.value = false
           } else {
             userId.value = x.uid
             if ( x.uid == adminUserUID ) {
               adminUser.value = true
-              console.log('Usuario logeado como administrador:', x.uid, adminUser.value)
+              log = 'Usuario logeado como administrador:', x.uid, adminUser.value
             } else {
               adminUser.value = false
-              console.log('Usuario logeado:', x.uid )
+              log = 'Usuario logeado:', x.uid
             }
           }
+          
+          config.debug && console.log(log)
       })
 
       provide('userId', computed(() => userId.value))
       provide('adminUser', computed(() => adminUser.value))
+      provide('config', config)
       // ----------------------------------------------------------------------------
-      
-      const alojamiento = Establecimiento.alias
+      	   
             
       return { alojamiento }
     }

@@ -1,16 +1,19 @@
-const huespedesLista = {
+const huespedLista = {
+	components: {
+		eliminaRegistro,
+	},
   template: `
-  <h3>Lista de Huéspedes</h3>
+  <h3>Lista Huéspedes</h3>
 	<fieldset>
 		<label for="nacionalidad">Nacionalidad</label>
 		<input v-model="filtro.nacionalidad" />
 	</fieldset>
 	<fieldset class="row">
-		<div class="col-3">
+		<div>
 			<label for="nombre">Nombre</label>
 			<input v-model="filtro.nombre" />
 		</div>
-		<div class="col-3">
+		<div>
 			<label for="apellido1">Apellido</label>
 			<input v-model="filtro.apellido1" />
 		</div>
@@ -28,13 +31,14 @@ const huespedesLista = {
 			<th>Reserva</th>
 			<th>Subido</th>
 			<th>Editar</th>
+			<th>Eliminar</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody v-if="fitroVacio">
         <tr
 			style="cursor: pointer"
 			v-for="{fEntrada, nombre, apellido1, apellido2, nacionalidad, tipoDocumento, numIdentificacion, habitacionID, reservaID, subido, id} in dataFiltrada"
-			@mouseover="campoID = id">
+			>
             <td>{{ fEntrada }}</td>
             <td>{{ nombre }}</td>
 			<td>{{ apellido1, apellido2 }}</td>
@@ -44,37 +48,42 @@ const huespedesLista = {
 			<td>{{ reservaID }}</td>
 			<td><input  v-if="subido" style="text-align: center" type="checkbox" checked></td>
 			<td><router-link :to="'/huesped/' + id">🖋</router-link></td>
+			<td><elimina-registro :id="id" /></td>
+
         </tr>
         <!-- and so on... -->
     </tbody>
 </table>
   `,
   setup() {
-	const ayer = fechaAyer()	// Lo saca de ./store/index.js
 	
 	const filtro = reactive({
 		nacionalidad: '',
 		nombre: '',
-		apellido1: ''
+		apellido1: '',
+	})
+	
+	
+	const fitroVacio = computed(() => {
+		if ( filtro.nacionalidad || filtro.nombre || filtro.apellido1 ) return true
+		return false
 	})
 	
     // GET
       // Recupera los datos de todos los huéspedes con ( fEntrada === ayer())
       // y los actualizo en la variable data.
       // Los registros se ordenan según fecha en _firebase.js_
+      //const huespedDB = db.collection('alojamiento').doc(Establecimiento.firebaseDOC).collection(Establecimiento.huespedCOL)
       const data = ref([])
-      cargaHuespedes((querySnapshot) => {
-        // debo vaciar el array porque si no se superponen
-        data.value = []
-        querySnapshot.forEach((doc) => {
-			if ( true ) {
+      huespedDB.orderBy("fecha","desc").get().then(query => {
+		  query.forEach((doc) => {
+			  if ( true ) {
 				data.value.push({ id: doc.id,
                             ...doc.data()
                 })
 			}
-        })
-        console.log( { data } )
-      })
+		  })
+	  })
 
       
       const dataFiltroNombre = computed(() => {
@@ -102,8 +111,7 @@ const huespedesLista = {
 			})
 	  })
 	  
-    const campoID = ref('')
-    
-    return { data, campoID, filtro, dataFiltrada }
+   
+    return { data, filtro, dataFiltrada, fitroVacio }
   }
 }

@@ -4,20 +4,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión Alojamiento</title>
+  <title>Gestión Alojamiento - Huésped y Hospederías</title>
 
   <!-- BOOTSTRAP & CSS -->
-<!--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"> -->
-  <link rel="stylesheet" href="../index.css">
-<!--  <link rel="stylesheet" href="mobil.css" media="screen and (max-width: 600px)"> -->
-  <link rel="stylesheet" href="impresion.css" media="print" />
+  <link rel="stylesheet" href="./estilo-general.css">
+  <link rel="stylesheet" href="./index.css">
 
   <!-- VUEJS -->
   <script src="https://unpkg.com/vue@next"></script>
   <script src="https://unpkg.com/vue-router@4"></script>
 
-  <!-- Cargo la instancia de Vue -->
-  <script src="app.js" defer></script>
+  <!-- Carga variables, clases y funciones a usar en el programa -->
+  <script src="./clases.js"></script>
+  <script src="./index.js"></script>
   
   <!-- FIREBASE -->
   <!-- The core Firebase JS SDK is always required and must be listed first -->
@@ -31,12 +30,11 @@
   <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-auth.js"></script>
 
   <!-- CUSTOM CODE -->
-  <script src="firebase.js"></script>
-  
-  <!-- Carga variables y funciones a usar en el programa -->
-  <script src="../clases.js"></script>
-  <script src="./store/index.js"></script>
+  <script src="./firebase.js"></script>
 
+  <!-- Cargo la instancia de Vue -->
+  <script src="./app.js" defer></script>
+  
 </head>
 
 <body>
@@ -44,28 +42,29 @@
   <!-- vuejs -->
   <div id="app" class="content"></div>
 
+  <div id="alerta"></div>
+  <div id="teleport"></div>
 
   <!-- componentes vuejs -->
-  <script src="./componentes/menuPrincipal.js" charset="utf-8"></script>
-  <script src="./componentes/botonHospederiasExportar.js"></script>
-  <script src="./componentes/baseHuespedesLista.js"></script>
-
+  <script src="./componente/eliminaRegistro.js" charset="utf-8"></script>
+  <script src="./componente/menuPrincipal.js" charset="utf-8"></script>
+  <script src="./componente/menuHuesped.js" charset="utf-8"></script>
+  <script src="./componente/pieDePagina.js" charset="utf-8"></script>
+  <script src="./componente/baseHuespedesLista.js" charset="utf-8"></script>		
+  <script src="./componente/botonHospederiasCopiar.js" charset="utf-8"></script>
+  
 <!-- modulos vuejs -->
-  <script src="./modulos/huespedFormulario.js" charset="utf-8"></script>
-  <script src="./modulos/huespedEdita.js" charset="utf-8"></script>
-  <script src="./modulos/hospederiasLista.js" charset="utf-8"></script>
-  <script src="./modulos/huespedesLista.js" charset="utf-8"></script>
-  <script src="./modulos/hospederiasExportar.js" charset="utf-8"></script>  
-  <script src="./modulos/huespedVer.js" charset="utf-8"></script>  
+  <script src="./modulo/huespedLista.js" charset="utf-8"></script>
+  <script src="./modulo/huespedFormulario.js" charset="utf-8"></script>
+  <script src="./modulo/huespedFormularioEdita.js" charset="utf-8"></script>
+  <script src="./modulo/huespedGET.js" charset="utf-8"></script>
+<!--  <script src="./modulo/hospederiasLista.js" charset="utf-8"></script> -->
+  <script src="./modulo/huespedLeeme.js" charset="utf-8"></script>
 
   <!-- Views -->
-  <script src="./views/home.js" charset="utf-8"></script>
-  <script src="./views/login.js" charset="utf-8"></script>
-  <script src="./views/registro.js" charset="utf-8"></script>
-  <script src="views/leeme.js" charset="utf-8"></script>
-  <script src="views/huespedes.js" charset="utf-8"></script>
-  <script src="views/hospederias.js" charset="utf-8"></script>
-
+  <script src="./pagina/Huesped.js" charset="utf-8"></script>
+  <script src="./pagina/Hospederias.js" charset="utf-8"></script>
+  <script src="./pagina/Login.js" charset="utf-8"></script>
 
   <!-- Configuración de Vue-Router -->
   <script src="./router.js" charset="utf-8"></script>

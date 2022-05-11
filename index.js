@@ -4,7 +4,7 @@
  */
  
  // Permite volver desde el módulo a la raiz desde donde accedo a los otros módulos
- const rutaInicio = '/dev'
+ //const rutaInicio = '/gestion-alojamiento'
  
  
 /*
@@ -36,10 +36,11 @@
  
 
   const Establecimiento = {
-	  alias: 'White Apartments & Sunrise Suites'
+	  alias: 'White Apartments & Sunrise Suites',
+	  firebaseDOC: 'WhiteApartments',
+	  huespedCOL: 'huesped',
   }
-  
-   
+
 // ---------------------------------------
 
 /*
@@ -71,72 +72,17 @@
   };
 }
 
+      
+      	  
 /*
- * 
  * FECHAS
  * 
  */
- 
-const fechaFormato = { day: '2-digit', month: '2-digit', year: 'numeric'}
 
-	let d = new Date().toISOString().slice(0, 10)
-	console.log({d})
-
-const fechaInput = (d) => {
-	return d.toISOString().slice(0, 10)
-}
-
-const fechaES = (d) => {
-	return d.toLocaleDateString('es-ES', fechaformato)
-}
-
-const ayerInput = () => {
-	let x = new Date()
-	x.setDate(x.getDate() -1)
-	return fechaInput(x)
-}
-
-const fechaAyer = () => {
-  let x = new Date()
-  x.setDate(x.getDate() -1)
-  return x.toLocaleDateString('es-ES', fechaFormato)
-}
-
-const fechaHoy = () => {
-	let x = new Date()
-	return x.toLocaleDateString('es-ES', fechaFormato)
-}
-
-const fechaEsPasado = (x) => {
-	let z = x.split('/')
-	z = `${z[2]}/${z[1]}/${z[0]}`
-	let d = new Date(z)
-	let S = new Date()
-	S.setDate(S.getDate() -1)
-	console.log(d,S)
-	return d < S
-}
-
-const fechaInternacional = (d) => {
-	return d.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
-}
-
-//var now = new Date();
-//var start = new Date(now.getFullYear(), 0, 0);
-//var diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
-//var oneDay = 1000 * 60 * 60 * 24;
-//var day = Math.floor(diff / oneDay);
-//console.log('Day of year: ' + day);
-
-const diaDelAnyo = (d) => {
-	var start = new Date(d.getFullYear(), 0, 0);
-	var diff = (d - start) + ((start.getTimezoneOffset() - d.getTimezoneOffset()) * 60 * 1000);
-	var oneDay = 1000 * 60 * 60 * 24;
-	return Math.floor(diff / oneDay);
-}
-//---------------------------------------------------------
-
-
+ const fecha = new Fecha(new Date())
+ const hoy = fecha.hoy
+ const ayer = fecha.ayer
+	   
 /*
  * 
  * HOSPEDERÍAS
@@ -150,7 +96,14 @@ const valorDeInicio = {
 	tipoDocumento: 'D',
 	provincia: null
 }
-// ------------------------------
+// -----------------------------
+const valorPorDefecto = {
+	numIdentificacion: '00000000',
+	fNacimiento: '2000-01-01',
+	fEntrada: fecha.aInput(ayer),
+	fExpedicionDoc: '2021-01-01'
+}
+
 
 /*
  * 
@@ -162,21 +115,21 @@ const valorDeInicio = {
  * 
  */
  
- 	let registrosHuespedes = []
+ 	//let registrosHuespedes = []
 
-	try {
+	//try {
 	
-	cargaHuespedes((querySnapshot) => {
-		querySnapshot.forEach((doc) => {
-				registrosHuespedes.push({ id: doc.id,
-                            ...doc.data()
-                })
-        })
-        console.log( { registrosHuespedes } )
-      })
-     } catch(e) {
-		 console.log(e)
-	 }
+	//cargaHuespedes((querySnapshot) => {
+		//querySnapshot.forEach((doc) => {
+				//registrosHuespedes.push({ id: doc.id,
+                            //...doc.data()
+                //})
+        //})
+        //console.log( { registrosHuespedes } )
+      //})
+     //} catch(e) {
+		 //console.log(e)
+	 //}
       
 // Filtros para campos de texto ----------------------------
 
@@ -253,6 +206,7 @@ function accentFold(inStr) {
     "LUXEMBURGO",
     "BELGICA",
     "RUMANIA",
+    "POLONIA",
   ]
   // Se muestra solo a españoles
   const documentosObjES = {

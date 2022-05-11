@@ -1,20 +1,19 @@
 const hospederiasLista = {
 	components: {
-		botonHospederiasExportar,
+		botonHospederiasCopiar,
 		baseHuespedesLista
 	},
   template: `
   <h3>Lista de Hospederías</h3>
   
-	<div v-if="subir.length > 0">
-		<base-huespedes-lista :data="subeArray" />
-		<boton-hospederias-exportar :data="subeArray" text="Exportar Selección" code="CODIGO.md" />
-	</div>
-	<boton-hospederias-exportar v-else :data="dataFiltrada" text="Exportar Todos" code="CODIGO.md" />
+	<base-huespedes-lista v-if="subir.length > 0" :data="subeArray" />
+	<base-huespedes-lista :data="dataFiltrada" @subeHospederias="hospederiasRecibidas" seleccionar />
 
   	<fieldset>
 		<label for="fEntrada">Fecha de Entrada</label>
 		<input v-model="filtro.fEntrada" type="date" />
+		<boton-hospederias-copiar :data="dataFiltrada" text="Copiar Todos" code="CODIGO.md" />
+		<boton-hospederias-copiar v-if="subir.length > 0" :data="subeArray" text="Copiar Selección" code="CODIGO.md" />
 	</fieldset>
 	
   <table class="styled-table">
@@ -50,8 +49,11 @@ const hospederiasLista = {
 </table>
     <div style="visibility: hidden;">{{ subir }}</div>
   `,
-  setup() {
-	  
+  setup(props) {
+	  const hospederiasRecibidas = (event) => {
+		  console.log('hospederiasRecibidas: ', event)
+	  }
+
 	  /*
 	   * FECHAS
 	   * 
@@ -78,17 +80,32 @@ const hospederiasLista = {
 	 * Usa SNAPSHOT, pero creo que un get() sería suficiente
 	 */
 	 
-      // SNAPSHOT
-      // Los registros se ordenan por fecha en _firebase.js_ antes de cargar aquí el resultado
       const data = ref([])
-      cargaHuespedes((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
+      
+      if (false) {
+		// GET
+		// Los registros se ordenan por fecha en _firebase.js_ antes de cargar aquí el resultado
+		huespedDB.orderBy("fecha","desc").get().then(query => {
+		  query.forEach((doc) => {
+			  if ( true ) {
 				data.value.push({ id: doc.id,
                             ...doc.data()
                 })
-        })
-      })
+			}
+		  })
+	  })
       
+	  } else {
+		  
+		// SNAPSHOT
+		huespedDATAxFecha((querySnapshot) => {
+			querySnapshot.forEach((doc) => {
+				data.value.push({ id: doc.id,
+                            ...doc.data()
+                })
+			})
+		})
+	  }
       
       // FILTRO FECHA DE ENTRADA
       // Filtra los registros de huéspedes según la fecha de entrada: fEntrada
@@ -128,6 +145,6 @@ const hospederiasLista = {
 
     // ------------------------------------------------------------------
       
-    return { dataFiltrada, filtro, filtroFechaEntrada, subir, subeArray  }
+    return { dataFiltrada, filtro, filtroFechaEntrada, subir, subeArray, hospederiasRecibidas  }
   }
 }

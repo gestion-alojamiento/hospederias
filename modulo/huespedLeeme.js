@@ -1,8 +1,6 @@
-const Leeme = {
+const huespedLeeme = {
   template: `
-    <h2>leeme</h2>
-    <h4>README.md</h4>
-    <br />
+    <h3>Info - módulo Huésped</h3>
     <pre>{{ texto }}</pre>
   `,
   setup() {

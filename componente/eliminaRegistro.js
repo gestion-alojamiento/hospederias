@@ -1,28 +1,27 @@
-const eliminaIncidencia = {
+const eliminaRegistro = {
   template: `
     <button
-      class="btn btn-danger btn-block mx-1"
+      class="boton boton-alerta"
       @click="confirma = !confirma"
       >
-      🗑 Eliminar
+      🗑
     </button>
     <Teleport to="#teleport">
       <div v-if="confirma" class="alerta">
         <div class="card" style="width: 18rem;">
           <div class="card-body">
-            <h5 class="card-title">¿Seguro que quieres eliminar la incidencia?</h5>
-            <p class="card-text" style="display: flex; justify-content: space-evenly">Después de eliminarla ya no se podrá recuperar.</p>
+            <h5 class="card-title">Eliminar registro {{ id }}</h5>
+            <p class="card-text" style="display: flex; justify-content: space-evenly">No se podrá recuperar después de eliminarlo.</p>
 
             <button
-              type="button"
-              class="btn btn-warning m-1"
+              class="boton boton-alerta mx1"
               @click="eliminar(id)">
                 🗑 Eliminar
               </button>
 
             <router-link
-              to="/incidencias"
-              class="btn btn-danger m-1"
+              to="/huesped/lista"
+              class="boton boton-claro mx-1"
               @click="cancelar">
                 🚫 Cancelar
               </router-link>
@@ -45,14 +44,15 @@ const eliminaIncidencia = {
 
     // Como los props no se mueden modificar lo mando desde el template a la función.
     const eliminar = (id) => {
-        incidenciaDB.doc(id).delete() && console.log('registro ' + id + ' eliminado')
+        const resultado = huespedDB.doc(id).delete()
+        console.log('registro ' + id + ' eliminado', resultado)
         confirma.value = false
-        router.push('/incidencias')
+        router.push('/huesped/lista')
     }
 
     const cancelar = () => {
       confirma.value = false
-      router.push('/incidencias')
+      router.push('/huesped/lista')
     }
 
 

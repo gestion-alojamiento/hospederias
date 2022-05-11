@@ -1,4 +1,4 @@
-const huespedFormularioAlta = {
+const huespedFormulario = {
   template: `
   <form name="huespedFormulario">
     <div class="card">
@@ -110,6 +110,10 @@ const huespedFormularioAlta = {
 							required>
 							<span></span>
 					</div>
+					
+					<div v-if="tipoDocumento == 'D' && numIdentificacion.length > 7">
+						<span class="boton boton-alerta" style="padding: 1rem" v-if=" letraDNI "> {{ letraDNI }} </span>
+					</div>
 
 					<div>
 						<label for="fExpedicionDoc">F. Expedición</label>
@@ -147,7 +151,7 @@ const huespedFormularioAlta = {
 			</div>
 			
 				<div class="card-footer">
-					<router-link  to=""
+					<router-link  to="/"
 						class="boton boton-alerta my-1"
 						@click="altaHuesped">
 							💾 Guardar
@@ -167,16 +171,6 @@ const huespedFormularioAlta = {
 `,
 style: ``,
 setup() {
-	
-	/*
-	 * FECHAS
-	 * 
-	 */
-	 
-	const fecha = new Fecha(new Date())
-
-	const hoy = fecha.hoy
-	const ayer = fecha.ayer
 
 	/*
 	 * FORMULARIO
@@ -186,12 +180,12 @@ setup() {
 	 
 	const nacionalidad = ref(valorDeInicio.nacionalidad)
 	const provincia = ref(valorDeInicio.provincia)
-	const tipoDocumento = ref(valorDeInicio.tipoDocumento)
 	
 	const huesped = reactive({
 		nombre: '',
 		apellido1: '',
 		apellido2: '',
+		tipoDocumento: valorDeInicio.tipoDocumento,
 		numIdentificacion: '',
 		sexo: valorDeInicio.sexo,
 		fExpedicionDoc: '',
@@ -208,15 +202,15 @@ setup() {
 
 	const documentosValidos = computed(() => {
 		if ( nacionalidad.value == 'ESPAÑA' ) {
-			tipoDocumento.value = "D"
+			huesped.tipoDocumento = "D"
 			return documentosObjES
 		}
 		else if ( paisesArrEU.includes(nacionalidad.value) ) {
-			tipoDocumento.value = "I"
+			huesped.tipoDocumento = "I"
 			return documentosObjEU
 		}
 		else {
-			tipoDocumento.value = "P"
+			huesped.tipoDocumento = "P"
 			return documentosObjOtros
 		}
 	})
@@ -225,29 +219,66 @@ setup() {
    * DATOS FORMATEADOS
    * 
    */
-   
-   // Puedo sustituir estos _computed_ con una función a la que llamo desde el template _@input="accion()"_
-   // Supongo que necesito un _emit_ que sustituya al valor... No estoy seguro.
-  const nombreCAP = computed(() => eliminaAcentos(huesped.nombre))
-  const apellido1CAP = computed(() => eliminaAcentos(huesped.apellido1))
-  const apellido2CAP = computed(() => eliminaAcentos(huesped.apellido2))
-  const numIdentificacionCAP = computed(() => limpiaCadena(huesped.numIdentificacion))
-  
-  // FECHAS
-  const fExpedicionDocES = computed(() => {
-	  x = new Date(huesped.fExpedicionDoc)
-	  return fecha.corta(x)
-  })
-  const fNacimientoES = computed(() => {
-	  x = new Date(huesped.fNacimiento)
-	  return fecha.corta(x)
-  })
-  const fEntradaES = computed(() => {
-	  x = new Date(huesped.fEntrada)
-	  return fecha.corta(x)
-  })
+
+  const letraDNI = computed(() => {
+	  let n, l, L
+	  const cadena="TRWAGMYFPDXBNJZSQVHLCKET"
+	  n = huesped.numIdentificacion.slice(0, 8) % 23
+	  L = huesped.numIdentificacion.slice(-1)
+	  l = cadena.substring(n,n+1)
+	  return L == l ? false : l
+
+	  })
 
   /* ---------------------- */
+
+	
+	/*
+	 * 
+	 * VALIDACIONES
+	 * 
+	 */
+	 
+	const salir = ref([])
+
+	const validaDatos = ( { nombre, apellido1, apellido2, numIdentificacion, fExpedicionDoc, fEntrada, fNacimiento, tipoDocumento } ) => {
+		 salir.value = []
+		 if ( tipoDocumento == 'D' && letraDNI.value ) {
+			err = 'La letra del DNI no es correcta. Debería ser: ' + letraDNI.value
+			alert(err)
+			salir.value.push(err)
+		}
+		if ( ! nombre || ! apellido1 ) {
+			err = '¡El nombre y apellidos son imprescindibles!'
+			alert(err)
+			salir.value.push(err)
+		}
+		if ( ! numIdentificacion ) {
+			huesped.numIdentificacion = valorPorDefecto.numIdentificacion
+			err = 'Se ha añadido ' + huesped.numIdentificacion + ' como número de documento'
+			alert(err)
+			salir.value.push(err)
+		}
+		if ( ! fExpedicionDoc || fecha.esPasado(fExpedicionDoc) ) {
+			huesped.fExpedicionDoc = valorPorDefecto['fExpedicionDoc']
+			err = 'Fecha de expedición de documento ' + fExpedicionDoc + ' ha sido modificada a: ' + huesped.fExpedicionDoc + '.'
+			alert(err)
+			salir.value.push(err)
+		}
+		if ( ! fNacimiento || fecha.esPasado(fNacimiento) ) {
+			huesped.fNacimiento = valorPorDefecto['fNacimiento']
+			err = 'Fecha de nacimiento ' + fNacimiento + ' ha sido modificada a: ' + huesped.fNacimiento + '.'
+			alert(err)
+			salir.value.push(err)
+		}
+		if ( ! fEntrada ) {
+			huesped.fEntrada = valorPorDefecto['fEntrada']
+			err = 'Fecha de entrada ' + fEntrada + ' ha sido modificada a: ' + huesped.fEntrada + '.'
+			alert(err)
+			salir.value.push(err)
+		}
+		return salir.value	
+	}
 
 	/*
 	 * FUNCION DE ALTA
@@ -255,41 +286,43 @@ setup() {
 	 */
 	 
 	let nuevoHuespedOBJ = {}
-	const salir = ref([])
-	function altaHuesped() {    
+	
+	async function altaHuesped() {
+
 		try {
+			let error = await validaDatos(huesped)
+			
+			if ( error.length ) {
+				alert('Verifica los datos e inténtalo de nuevo')
+				console.log({error})
+				throw "No se puede enviar el formulario"
+			}
 
 			nuevoHuespedOBJ = {
-				// Directamente del formulario
 				"reservaID": huesped.reservaNum,
 				"habitacionID": huesped.habitacionNum,
 				"sexo": huesped.sexo,
-				// Datos formateados
-				"nombre": nombreCAP.value,
-				"apellido1": apellido1CAP.value,
-				"apellido2": apellido2CAP.value,
+				"nombre": eliminaAcentos(huesped.nombre),
+				"apellido1": eliminaAcentos(huesped.apellido1),
+				"apellido2": eliminaAcentos(huesped.apellido2),
 				"nacionalidad": nacionalidad.value,
-				"tipoDocumento": tipoDocumento.value,
-				"numIdentificacion": numIdentificacionCAP.value,
-				"fExpedicionDoc": fExpedicionDocES.value,
-				"fNacimiento": fNacimientoES.value,
-				"fEntrada": fEntradaES.value,
+				"tipoDocumento": huesped.tipoDocumento,
+				"numIdentificacion": limpiaCadena(huesped.numIdentificacion),
+				"fExpedicionDoc": fecha.inputACorta(huesped.fExpedicionDoc),
+				"fNacimiento": fecha.inputACorta(huesped.fNacimiento),
+				"fEntrada": fecha.inputACorta(huesped.fEntrada),
 				"nacionalidadIndex": ( paisesArr.indexOf(nacionalidad.value) +1 ),
 				"provincia": provincia.value,
 			}
-		
-			// VERIFICACIÓN DE DATOS. EN CASO DE ERROR SALE DE LA FUNCIÓN ANTES DE ENVIAR LOS DATOS A FIRESTORE
-			if ( validaDatos(nuevoHuespedOBJ) && salir.value.length ) {
-				alert('Verifica los datos e inténtalo de nuevo' + salir.value)
-				console.log(salir)
-				throw "No se puede enviar el formulario"
-			}
-			// ----
 			
-			//console.log( { nuevoHuespedOBJ } )
-			console.log( 'Enviando datos a FIREBASE: ', nuevoHuesped (nuevoHuespedOBJ))
+			//nuevoHuesped(nuevoHuespedOBJ) && console.log( 'Enviando datos a FIREBASE: ')
+			await huespedDB.add({ ...nuevoHuespedOBJ, fecha: new Date() })
+			.then((docRef) => { console.log("Nuevo registro con id: ", docRef.id); })
+			.catch((error) => {
+				throw "Error al añadir nuevo registro: " + error
+			 });
 			
-			// El reset ya no funciona porque el v-model tiene datos cargados.
+			// Permite seleccionar que valores reseteo y que valores quiero que se queden con el valor actual
 			limpiaFormulario()
 
 		} catch (e) {
@@ -308,91 +341,21 @@ setup() {
 	  huesped.fExpedicionDoc= ''
 	  huesped.numIdentificacion = ''
 	  huesped.sexo = valorDeInicio.sexo
-//	  provincia.value = valorDeInicio.provincia
-	  
-//      huespedFormulario.reset();
   }
-	/*
-	 * 
-	 * VALIDACIONES
-	 * 
-	 */
-	 
 
-	 const validaDatos = ( { nombre, apellido1, numIdentificacion, fExpedicionDoc, fEntrada } ) => {
-		 salir.value = []
-		 
-		if ( ! nombre || ! apellido1 ) {
-			err = '¡El nombre y apellidos son imprescindibles!'
-			alert(err)
-			salir.value.push(err)
-			}
-
-		if ( ! numIdentificacion ) {
-			let nuevoNumIdentificacion = "000000"
-			huesped.numIdentificacion = nuevoNumIdentificacion // Añadir una opción en el alert para enviar la ficha o descartarla
-			err = 'Se ha añadido ' + nuevoNumIdentificacion + 'como número de documento'
-			alert(err)
-			salir.value.push(err)
-		}
-		if ( ! fExpedicionDoc || fecha.esPasado(fExpedicionDoc)  ) {
-			huesped.fExpedicionDoc = '2021-01-01'
-			err = 'Fecha de expedición de documento no válida: ' + fExpedicionDoc + '. Se ha modificado a: "01/01/2021".'
-			alert(err)
-			salir.value.push(err)
-		}
-		if ( ! fEntrada) {
-			nuevoHuespedOBJ.fEntrada = fecha.aInput(ayer)
-			err = 'Se ha actualizado la Fecha de Entrada a: ' + nuevoHuespedOBJ.fEntrada
-			alert(err)
-			salir.value.push(err)
-		}
-		return salir.value		
-	}
-	
-	/*
-	 * 
-	 * GUARDAR OBJETO EN FIRESTORE
-	 * 
-	 */
-
- 
-	// ESTO TAMBIÉN FUNCIONA:
-	// function nuevoHuesped (obj) {
-	// const {nombre, apellido1, apellido2, nacionalidad, tipoDocumento, numIdentificacion, fExpedicionDoc, sexo, fNacimiento, fEntrada, nacionalidadIndex, provincia, reservaID, habitacionID } = obj
-	function nuevoHuesped ({nombre, apellido1, apellido2, nacionalidad, tipoDocumento, numIdentificacion, fExpedicionDoc, sexo, fNacimiento, fEntrada, nacionalidadIndex, provincia, reservaID, habitacionID } ) {
-		hospederiasDB.doc().set({
-			nombre,
-			apellido1,
-			apellido2,
-			nacionalidad,
-			tipoDocumento,
-			numIdentificacion,
-			fExpedicionDoc,
-			sexo,
-			fNacimiento,
-			fEntrada,
-			nacionalidadIndex,
-			provincia,
-			reservaID,
-			habitacionID,
-			fecha: new Date()
-			})
-		}
+// ----------------------------------
 
 
 
   return {
-	fEntradaES,
     provinciasES,
     provincia,
     paisesArr,
     documentosValidos,
-    tipoDocumento,
     nacionalidad,
     altaHuesped,
-    fExpedicionDocES,
     ...toRefs(huesped),
+    letraDNI,
   }
 }
 }
