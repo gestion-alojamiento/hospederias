@@ -1,9 +1,23 @@
+<<<<<<< HEAD
 /**
  * CÓDIGO EJECUTADO AL EXPORTAR LOS HUESPEDES
  * Primero crear el array con los huéspedes
  * Luego copiar este código
  * Enter
  */
+=======
+# Código
+## Código para insertar los registros en la página de hospederías de la Policía Nacional
+
+  - Primero crear el array con los huéspedes
+  - Luego copiar este código
+  - Enter
+
+
+```
+
+// Funciones secundarias:
+>>>>>>> 53e6e1e0ebcfdf2027fb20d5b4c2a81ee8c18eb0
 
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -17,17 +31,18 @@ const tipoDocumento = (v) => {
 	sel.selectedIndex = 0
 }
 
-/**
+// Función principal
+
+ /**
  * @param {Array} arr - array de objetos (huéspedes)
  * @param {Number}  i  - primer registro del array a subir a hospederías
  * @param {Numbre}  f  - último registro a subir a hospederías
- * Comprobar funcionamiento del parámetro f
+ *
  * Ejemplos:
  * subir(huespedes, 3, 3) -> Subir únicamente el registro 3
  * subir(huespedes, 4, 12) -> Subir los registros del 4 al 12
  * subir(huespedes, 1) -> Subir todos los registros
  */
- 
 const subir = (arr, i, f) => {
 
 	let j = ( i - 1 ) // j es el índice del registro en el array
@@ -68,4 +83,11 @@ const subir = (arr, i, f) => {
 	
 }
 
+<<<<<<< HEAD
 subir(huespedes, 1)
+=======
+// Ejecución del código:
+
+subir(huespedes, 1)
+```
+>>>>>>> 53e6e1e0ebcfdf2027fb20d5b4c2a81ee8c18eb0
