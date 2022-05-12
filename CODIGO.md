@@ -1,7 +1,9 @@
-
-// Primero crear el array con los huéspedes
-// Luego copiar este código
-// Enter
+/**
+ * CÓDIGO EJECUTADO AL EXPORTAR LOS HUESPEDES
+ * Primero crear el array con los huéspedes
+ * Luego copiar este código
+ * Enter
+ */
 
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -67,4 +69,3 @@ const subir = (arr, i, f) => {
 }
 
 subir(huespedes, 1)
-
