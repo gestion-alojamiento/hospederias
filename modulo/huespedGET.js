@@ -1,11 +1,15 @@
+/**
+ * Options API
+ * Pasar a Composition API
+ */
+
 const huespedGET = {
 	components: {
 		huespedFormularioEdita,
 	},
   template: `
-	<div>User {{ $route.params.id }}</div>
-	<div>{{ r }}</div>
 	<huesped-formulario-edita :huespedOBJ="huesped" :id="$route.params.id" />
+	<p style="margin-top:2rem; font-size: 1.4rem"> id: {{ r }}</p>
  `,
   data() {
 	  return {

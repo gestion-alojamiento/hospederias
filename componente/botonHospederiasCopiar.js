@@ -13,7 +13,8 @@ const botonHospederiasCopiar = {
 	<textarea
 		id="copia-codigo"
 		class="copia-textarea"
-		v-model="textarea" placeholder="add multiple lines"></textarea>
+		v-model="textarea" placeholder="add multiple lines">
+	</textarea>
   `,
   props: {
     data: {
@@ -57,7 +58,6 @@ const botonHospederiasCopiar = {
 
           try {
             var successful = document.execCommand('copy');
-            var msg = successful ? 'successful' : 'unsuccessful';
             //alert('Testing code was copied ' + msg);
             alerta.value = true
           } catch (err) {

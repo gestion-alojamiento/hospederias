@@ -1,3 +1,4 @@
+// Muestra un modal para eliminar un huésped
 const eliminaRegistro = {
   template: `
     <button
@@ -10,11 +11,12 @@ const eliminaRegistro = {
       <div v-if="confirma" class="alerta">
         <div class="card" style="width: 18rem;">
           <div class="card-body">
-            <h5 class="card-title">Eliminar registro {{ id }}</h5>
+            <h5 class="card-title">Eliminar registro</h5>
+            <p>id: {{ id }}</p>
             <p class="card-text" style="display: flex; justify-content: space-evenly">No se podrá recuperar después de eliminarlo.</p>
 
             <button
-              class="boton boton-alerta mx1"
+              class="boton boton-alerta mx-1"
               @click="eliminar(id)">
                 🗑 Eliminar
               </button>
@@ -37,7 +39,7 @@ const eliminaRegistro = {
       default: ''
     }
   },
-  setup(props) {
+  setup() {
 
     // Al arrancar el modulo la alerta no está visible.
     const confirma = ref(false)

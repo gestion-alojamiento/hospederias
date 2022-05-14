@@ -17,33 +17,6 @@
   - firebase-firestore
   - firebase-auth
 
-## Subir huéspedes desde la página de la Guardia Civil:
-
-## Estructura
-
-  + ../index.css
-  + app.js
-  + firebase.js
-  + index.css
-  + index.html
-  + inicio.md
-  + README.md
-  + router.js
-  + /componente
-    - baseHuespedesLista.js
-    - botonHospederiasCopiar.js
-    - menuHuesped.js
-    - menuPrincipal.js
-    - pieDePagina.js
-  + /modulo
-    - huespedLeeme.js
-    - huespedFormulario.js
-    - huespedEdita.js
-    - huespedLista.js
-    - huespedGET.js
-  + /pagina
-    - Huesped.js
-
 ## Pendiente
 
   - Actualizar listado al eliminar un registro

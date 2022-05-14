@@ -1,3 +1,5 @@
+// Listado de huéspedes que permite eliminar un registro con 'eliminaRegistro'
+// Permite editar un registro con el enclace: '/huesped7 + id
 const huespedLista = {
 	components: {
 		eliminaRegistro,

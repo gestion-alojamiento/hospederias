@@ -18,7 +18,7 @@ const Hospederias = {
 	<base-huespedes-lista :data="dataFiltrada" @subeHospederias="hospederiasRecibidas" seleccionar />
 
   `,
-  setup(props) {
+  setup() {
 
 	  /*
 	   * FILTRO

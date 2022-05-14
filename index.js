@@ -2,15 +2,25 @@
  * CONFIGURACION SERVIDOR
  * 
  */
+
+ /*
+ * INFO ESTABLECIMIENTO
+ */
  
- // Permite volver desde el módulo a la raiz desde donde accedo a los otros módulos
- //const rutaInicio = '/gestion-alojamiento'
+ const Establecimiento = {
+  alias: 'White Apartments & Sunrise Suites',
+  firebaseDOC: 'WhiteApartments',
+  huespedCOL: 'huesped',
+}
+// ---------------------------------------
+
+
+ // Define la ruta de inicio para el 'router'
+ const rutaInicio = '/'
  
  
 /*
- * 
  * GESTIÓN USUARIOS
- * 
  */
  
   const adminUsersOBJ = {
@@ -23,29 +33,16 @@
 		correo: 'gesalojamiento@gmail.com'
 	}
   }
-  
-  const adminUserUID = adminUsersOBJ.info.UID	// from './store/index.js'
+
+// Selecciona cual de los usuarios tiene funciones de administrador
+  const adminUserUID = adminUsersOBJ.info.UID // Administrador => info
 
 // ------------------------------------------------------
 
-/*
- * 
- * INFO ESTABLECIMIENTO
- * 
- */
- 
 
-  const Establecimiento = {
-	  alias: 'White Apartments & Sunrise Suites',
-	  firebaseDOC: 'WhiteApartments',
-	  huespedCOL: 'huesped',
-  }
-
-// ---------------------------------------
 
 /*
  * ORDEN DE OBJETOS
- * 
  */
  
  function compareValues(key, order = 'asc') {
@@ -74,67 +71,48 @@
 
       
       	  
-/*
+/**
  * FECHAS
- * 
+ * Genera una nueva clase Fecha() declarada en clases.js
  */
 
  const fecha = new Fecha(new Date())
  const hoy = fecha.hoy
  const ayer = fecha.ayer
-	   
+
+
 /*
- * 
  * HOSPEDERÍAS
- * 
  */
  
-// Valores de Inicio ---------------------------------------
+
+// Valores de inicio para el formulario ------------------
 const valorDeInicio = {
-	sexo: 'M',
+	sexo: 'F',
 	nacionalidad: 'ESPAÑA',
 	tipoDocumento: 'D',
 	provincia: null
 }
 // -----------------------------
+
+// Valores por defecto en caso de error u omisión --------------
 const valorPorDefecto = {
 	numIdentificacion: '00000000',
 	fNacimiento: '2000-01-01',
 	fEntrada: fecha.aInput(ayer),
 	fExpedicionDoc: '2021-01-01'
 }
+// ---------------------------------
 
 
-/*
- * 
- * DATOS
- * 
- * No estoy seguro de si esto me servirá
- * Se carga al principio, pero de manera síncrona por lo que si llamo al registro desde otro lado antes de que cargue no me sirve
- * Además no es _reactivo_, si se modifica la base de datos no se actualiza.
- * 
+/**
+ * HERRAMIENTAS
  */
- 
- 	//let registrosHuespedes = []
 
-	//try {
-	
-	//cargaHuespedes((querySnapshot) => {
-		//querySnapshot.forEach((doc) => {
-				//registrosHuespedes.push({ id: doc.id,
-                            //...doc.data()
-                //})
-        //})
-        //console.log( { registrosHuespedes } )
-      //})
-     //} catch(e) {
-		 //console.log(e)
-	 //}
-      
-// Filtros para campos de texto ----------------------------
+
+// CADENAS  -------------------------------------------------------------
 
 // Sin tocar las EÑES
-// FUNCIONA!!
 var eliminaAcentos = (function () {
   var in_chrs   = 'àáâãäçèéêëìíîïòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝ',
       out_chrs  = 'aaaaaceeeeiiiiooooouuuuyyAAAAACEEEEIIIIOOOOOUUUUY', 
@@ -156,16 +134,20 @@ const limpiaCadena = (x) => {
   return x.split(/[.,:\/\\ -]/).join('')
 }
 
-//const eliminaAcentos = (x) => {
-  // Elimina acentos. Ejemplo: JOSÉ HÄNS PEÑA
-//  return x.normalize("NFC").replace(/[\u0300-\u036f]/g, "")	// No ha remplazado nada
-//  return x.normalize("NFD").replace(/[\u0300-\u036f]/g, "")		// Lo remplaza todo
-//  return x.normalize("NFKC").replace(/[\u0300-\u036f]/g, "")	// No sustituye nada
-//  return x.normalize("NFKD").replace(/[\u0300-\u036f]/g, "")	// Lo ha quitado todo
-//}
+/* 
+// Elimina acentos. Ejemplo: JOSÉ HÄNS PEÑA
+// No funciona del todo bien, se puede buscar más info al respecto
+const eliminaAcentos = (x) => {
+ return x.normalize("NFC").replace(/[\u0300-\u036f]/g, "")	// No ha remplazado nada
+ return x.normalize("NFD").replace(/[\u0300-\u036f]/g, "")		// Lo remplaza todo
+ return x.normalize("NFKC").replace(/[\u0300-\u036f]/g, "")	// No sustituye nada
+ return x.normalize("NFKD").replace(/[\u0300-\u036f]/g, "")	// Lo ha quitado todo
+}
+ */
 
-// Otra opción
-// Me permitiría cambiar Ä => AE...
+
+
+// Permite cambiar Ä => AE...
 function quitarAcentos(cadena){
 	const acentos = {'á':'a','é':'e','í':'i','ó':'o','ú':'u','Á':'A','É':'E','Í':'I','Ó':'O','Ú':'U'};
 	return cadena.split('').map( letra => acentos[letra] || letra).join('').toString();	
@@ -207,6 +189,9 @@ function accentFold(inStr) {
     "BELGICA",
     "RUMANIA",
     "POLONIA",
+    "LIECHTENSTEIN",
+    "HUNGRIA",
+    "BULGARIA"
   ]
   // Se muestra solo a españoles
   const documentosObjES = {

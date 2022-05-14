@@ -1,5 +1,13 @@
 CHANGELOG
 
+## v2
+
+  - Eliminados módulos obsoletos (hospederíasLista y huespedEdita)
+  - Código un poco más legible y limpio
+## v1
+
+  - Ejecutable sin necesidad de descargar archivos del directorio padre
+  - CDNs de producción (vue + vue-router)
 ## v0.0.3
 
   - Elimina huéspedes (falta refrescar listado después de eliminar el registro)

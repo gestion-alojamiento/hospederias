@@ -93,7 +93,7 @@ select {
     border: 2px solid var(--input-border);
     flex: 1;
     margin: 10px 0px;
-	padding:10px;
+	  padding:10px;
     color: #fff;
     background-color: var(--oscuro);
     background-image: none;
@@ -104,21 +104,21 @@ select {
     display: none;
   }
   
-  select:focus {
+select:focus {
 	background-color: var(--tema-oscuro);
 	color: var(--text);
-  }
+}
 
 label {
 	position: relative;
-    display: inline-block;
-    font-weight: bold;
-    padding: 0.5rem 1rem 0.5rem 0.5rem;
+  display: inline-block;
+  font-weight: bold;
+  padding: 0.5rem 1rem 0.5rem 0.5rem;
 	margin: 0.2rem 0.2rem 0rem 0rem;
-    text-decoration: none;
-    background: var(--oscuro);
-    color: var(--claro);
-    border-radius: .2rem;
+  text-decoration: none;
+  background: var(--oscuro);
+  color: var(--claro);
+  border-radius: .2rem;
 /*    margin: .25rem 10px .25rem 0px;*/
 }
 textarea {

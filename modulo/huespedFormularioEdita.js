@@ -168,9 +168,6 @@ const huespedFormularioEdita = {
 				</div>
 			</div>
 		</form>
-		<div>{{ test }}</div>
-		<div>fNacimiento: {{ fNacimiento }}</div>
-		<div> --- </div>
 
   `,
   props: {
@@ -186,8 +183,6 @@ const huespedFormularioEdita = {
   setup(props) {
 	  
 	const fecha = new Fecha(new Date())
-
-	const hoy = fecha.hoy
 	const ayer = fecha.ayer
 
 	/*
@@ -268,14 +263,6 @@ const huespedFormularioEdita = {
 	/* --------------------------------- */
 	
 	
-	/*
-	 * VALIDACIÓN
-	 * 
-	 */
-	 
-	const salir = ref([])
-	
-	
   	/*
 	 * FUNCION DE ALTA
 	 * 
@@ -338,6 +325,6 @@ const huespedFormularioEdita = {
 		...param,
 		accionFormulario,
 		test
-		}
 	}
+  }
 }

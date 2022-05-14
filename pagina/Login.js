@@ -5,13 +5,18 @@ const Login = {
       <input type="text" placeholder="Correo" v-model="correo" />
       <input type="password" placeholder="Clave" v-model="clave" />
       <input type="submit" value="Login">
-      <!-- No necesito página de registro para nuevos usuarios
-      <p>¿No tienes cuenta?
-        <router-link to="/registro">Regístrate aquí</router-link>
-      </p>
-      -->
+      <div v-if="opcion.registro">
+        <p>¿No tienes cuenta?
+          <router-link to="/registro">Regístrate aquí</router-link>
+        </p>
+      </div>
     </form>`,
   setup() {
+
+    const opcion = reactive({
+            registro: inject('menuRegistro'),
+          })
+
     const correo = ref('')
     const clave = ref('')
 
@@ -23,10 +28,11 @@ const Login = {
         .then(data => console.log(data))
         .catch(err => alert(err.message))
 
-      router.push('/incidencias')
+      router.push('/')
     }
 
     return {
+      opcion,
       Login,
       correo,
       clave

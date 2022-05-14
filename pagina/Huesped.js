@@ -1,3 +1,4 @@
+// Página general que muestra el título, el menún de navegación de huéspedes y el componente de turno.
 const Huesped = {
   components: {
     menuHuesped

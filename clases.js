@@ -1,15 +1,14 @@
-/*
+/**
  * CLASES
- * Creo nuevo código javascript aquí para testearlo antes de meterlo en el código
- * 
  */
  
-/*
- * CLASE Fecha
+/** 
+ * Fecha
  * 
- * const hoy = new Fechas(new Date())
+ * Nueva clase:
+ * const hoy = new Fecha(new Date())
  * 
- * JSON
+ * Trabajando con JSON:
  * fecha.JSON => Corrige el método toJSON(), porque devuelve el día y hora locales, pero en el formato JSON (Siempre y cuando no hagas caso a la zona horaria)
  * fecha.aGMT(fecha.hoy).toJSON() => Devuelve el mismo valor que antes
  * fecha.aJSON(fecha.mañana) == fecha.aGMT(fecha.mañana).toJSON() => Lo mismo que antes pero ahora le suma 24 horas
@@ -117,5 +116,3 @@ class Fecha {
 	return this.fecha < S
   }
 }
-
-//export { Fecha }

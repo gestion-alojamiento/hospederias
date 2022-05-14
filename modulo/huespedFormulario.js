@@ -169,7 +169,6 @@ const huespedFormulario = {
 			</div>
 		</form>
 `,
-style: ``,
 setup() {
 
 	/*

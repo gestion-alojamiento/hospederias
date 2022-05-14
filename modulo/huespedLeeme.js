@@ -1,6 +1,6 @@
 const huespedLeeme = {
   template: `
-    <h3>Info - módulo Huésped</h3>
+    <h3>Léeme - módulo Huésped</h3>
     <pre>{{ texto }}</pre>
   `,
   setup() {

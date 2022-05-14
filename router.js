@@ -39,9 +39,6 @@ const routes = [
 			}
 		]
 	},
-//	{ path: '/', component: Inicio },
-//	{ path: '/registro', component: Inicio },
-//	{ path: '/login', component: Login },
 ]
 
 const router = VueRouter.createRouter({
