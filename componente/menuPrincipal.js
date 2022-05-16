@@ -1,36 +1,38 @@
 const menuPrincipal = {
   template: `
     <p class="menu-principal">
-	  <span>
-		<span>
-			<router-link :to="rutaInicio">Inicio</router-link> | 
-		</span>
+      <span>
+        <span v-if="opcion.inicio">
+            <router-link :to="rutaInicio">Inicio</router-link> | 
+        </span>
         <span v-if="opcion.huespedes" >
-			<router-link to="/huesped">Huéspedes</router-link> | 
-		</span>
+          <router-link to="/huesped">Huéspedes</router-link> | 
+        </span>
         <span v-if="opcion.huespedes" >
-			<router-link to="/huesped/lista">Listado huéspedes</router-link> | 
-		</span>
-    <span v-if="opcion.huespedes" >
-      <router-link to="/huesped/hospederias">Hospederías</router-link> | 
-    </span>
+          <router-link to="/huesped/lista">Listado huéspedes</router-link> | 
+        </span>
         <span v-if="opcion.huespedes" >
-			<router-link to="/huesped/alta">Alta huéspedes</router-link> | 
-		</span>
+          <router-link to="/huesped/hospederias">Hospederías</router-link> | 
+        </span>
+        <span v-if="opcion.huespedes" >
+          <router-link to="/huesped/alta">Alta huéspedes</router-link> | 
+        </span>
         <span v-if="opcion.leeme">
-			<router-link to="/leeme">Leeme.md</router-link> |
+          <router-link to="/leeme">Leeme.md</router-link> |
         </span>
         <span v-if="opcion.logeado">
-			<router-link to="rutaInicio" @click="cerrarSesion">🏃‍</router-link> |
+          <router-link to="rutaInicio" @click="cerrarSesion">🏃‍</router-link>
         </span>
+        <span v-else>
+          <router-link to="login">Login</router-link>
       </span>
-      <span>{{ muestraFecha }}</span>
+      <span> {{ muestraFecha }} </span>
     </p>`,
     setup() {
 
       const opcion = reactive({
-//      inicio: inject('menuHome'),
-//      login: inject('menuLogin'),
+        inicio: inject('menuHome'),
+        login: inject('menuLogin'),
 //      registro: inject('menuRegistro'),
 //      usuarios: inject('menuUsuarios'),
         leeme: inject('menuLeeme'),
