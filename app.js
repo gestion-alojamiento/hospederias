@@ -19,9 +19,11 @@ const { createApp, ref, reactive, toRefs, inject, provide, onBeforeMount, onMoun
    */
     provide() {
       return {
-        menuRegistro: false,
+        // Permite registro de nuevos usuarios:
+        menuRegistro: true,
+        // Muestra el menú de navegación principal
         menuHome: true,
-        menuLogin: false,
+        menuLogin: true,
         menuUsuarios: false,
         menuLeeme: true,
         menuAltaHuesped: false,
