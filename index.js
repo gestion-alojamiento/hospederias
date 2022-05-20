@@ -257,7 +257,7 @@ function accentFold(inStr) {
     'Las Palmas',
     'Granada',
     'Guadalajara',
-    'Ghipuzkoa',
+    'Gipuzkoa',
     'Huelva',
     'Huesca',
     'Illes Balears',
