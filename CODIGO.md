@@ -21,7 +21,7 @@ const tipoDocumento = (v) => {
  * @param {Array} arr - array de objetos (huéspedes)
  * @param {Number}  i  - primer registro del array a subir a hospederías
  * @param {Numbre}  f  - último registro a subir a hospederías
- * Comprobar funcionamiento del parámetro f
+ * 
  * Ejemplos:
  * subir(huespedes, 3, 3) -> Subir únicamente el registro 3
  * subir(huespedes, 4, 12) -> Subir los registros del 4 al 12
@@ -30,14 +30,22 @@ const tipoDocumento = (v) => {
  
 const subir = (arr, i, f) => {
 
-	let j = ( i - 1 ) // j es el índice del registro en el array
-	const x = arr[j]  // es el registro cuyo orden corresponde con 'i'
+	// Calcula el índice del elemento actual del array
+	// El primer elemento (1) corresponde al elemento 0 del array
+	let j = ( i - 1 )
+
+	// Si no hay segundo parámetro en la función subir(), este será igual al número de elemntos del array huespedes[]
 	let fin = f ? f : arr.length
+
+	// Extraigo los datos el huésped y los guardo en la variable x
+	const x = arr[j]  // es el registro cuyo orden corresponde con 'i'
 	
 	if ( j < fin) {
 	
+		// Muestra en consola los datos principales del huésped que se va a subir a hospederías.
 		console.log(( i ) + ' de ' + arr.length, x.apellido1, x.nacionalidad, x.tipoDocumento, x.sexo )
 
+		// Introduce los datos del huésped en los inputs correspondientes
 		let nacimiento = x.fNacimiento.split('/')
 		const [ dia, mes, ano ] = nacimiento
 
@@ -57,10 +65,12 @@ const subir = (arr, i, f) => {
 
 		tipoDocumento(x.tipoDocumento)
 
+		// Ejecuta los clicks en los botones correspondientes para ir guardando uno a uno los registros
 		sleep(14000).then(() => { document.querySelector("#btnGuardar").click() })
 		sleep(20000).then(() => { document.querySelector(".close").click() })
 		sleep(25000).then(() => { subir(arr, ++i, fin) })
 	}
+	
 	if (j >= fin) {
 		console.log('No hay más registros para subir')
 		return
