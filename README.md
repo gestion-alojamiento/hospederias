@@ -7,6 +7,12 @@
   - Consulta de huéspedes con posibilidad de utilizar filtros por nacionalidad, nombre y apellido
   - Valida datos como fecha de expedición de documento de identidad y letra del DNI
 
+## Instalación
+
+  - Cambiar de nombre al archivo firebase-ejemplo.js -> firebase.js
+  - Añadir los datos de nuestro proyecto en firebase al archivo firebase.js
+  - Crear la base de datos 'firestore database' con la estructura: alojamiento -> <Establecimiento> -> huesped 
+  
 ## Tecnologías
 
  1. html, CSS

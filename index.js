@@ -25,11 +25,11 @@
  
   const adminUsersOBJ = {
 	info: {
-		UID: 'R1DlXD7tg7S3SUQUKjSbIRloLw43',
+		UID: 'Kd1ZOVY0NNRntrCVlD7LnXr4kbG2',
 		correo: 'info@whiteapartments.com'
 	},
 	gesalojamiento: {
-		UID: '8zrl5OqK5nStXN4qGa3upkrZEOD3',
+		UID: 'fbOd44zBIZNGg80nuwkIlIK4tqO2',
 		correo: 'gesalojamiento@gmail.com'
 	}
   }
