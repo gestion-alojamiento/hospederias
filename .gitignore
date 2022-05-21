@@ -105,3 +105,4 @@ dist
 
 # Firebase
 firebase.js
+firebase-config.js
