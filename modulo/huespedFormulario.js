@@ -228,10 +228,32 @@ setup() {
 	  return L == l ? false : l
 
 	  })
-
   /* ---------------------- */
 
-	
+  /**
+   * fechaID
+   * Modifica la fecha de expedición cuando se ha introducido la fecha de caducidad
+   * @param {string} f fecha en formato yyy-mm-dd
+   * @param {string} pais pais de expedición del documento del huésped
+   * @param {string} id Letra de identificación del tipo de documento del huésped
+   */
+   const fechaID = (f, pais, id) => {
+	let d = new Date(f)
+	const year = d.getFullYear();
+	const month = d.getMonth();
+	const day = d.getDate() + 1;
+	const fechaMenos10 = d.setFullYear(d.getFullYear() - 10)
+	if ( pais == "ALEMANIA" && id == "I" ) return new Date(year - 10, month, day + 1).toISOString().slice(0, 10);
+  /**
+   * FECHA CADUCIDAD MENOS 10 AÑOS
+   * VALIDO PARA:
+   * ESPAÑA D
+   * BELGICA I
+   */
+	return new Date(fechaMenos10).toISOString().split('T')[0];
+}
+  /* ------------------------------- */
+
 	/*
 	 * 
 	 * VALIDACIONES
@@ -258,7 +280,13 @@ setup() {
 			alert(err)
 			salir.value.push(err)
 		}
-		if ( ! fExpedicionDoc || fecha.esPasado(fExpedicionDoc) ) {
+		if ( fecha.esPasado(fExpedicionDoc) ) {
+			huesped.fExpedicionDoc = fechaID(fExpedicionDoc, nacionalidad.value, huesped.tipoDocumento)
+			err = 'Fecha de expedición de documento' + fExpedicionDoc + ' ha sido actualizada a: ' + huesped.fExpedicionDoc + '.'
+			alert(err)
+			salir.value.push(err)
+		}
+		if ( ! fExpedicionDoc ) {
 			huesped.fExpedicionDoc = valorPorDefecto['fExpedicionDoc']
 			err = 'Fecha de expedición de documento ' + fExpedicionDoc + ' ha sido modificada a: ' + huesped.fExpedicionDoc + '.'
 			alert(err)
@@ -323,13 +351,15 @@ setup() {
 			
 			// Permite seleccionar que valores reseteo y que valores quiero que se queden con el valor actual
 			limpiaFormulario()
+		
+			// Coloca el foco en el campo del número de reserva
+			document.querySelector("#reservaID").focus();
 
 		} catch (e) {
 			console.log(e)
+			// Coloca el foco en el campo del número de reserva
+			document.querySelector(".boton-alerta").focus();
 		}
-		
-		// Coloca el foco en el campo del número de reserva
-		document.querySelector("#reservaID").focus();
 	}
   
   const limpiaFormulario = () => {
