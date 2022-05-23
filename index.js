@@ -231,7 +231,7 @@ function accentFold(inStr) {
     "X": "PERMISO DE RESIDENCIA DE ESTADO MIEMBRO DE LA UE"
   }
   const regionesES = [
-	"Andalucí­a",
+	"Andalucía",
 	"Aragón",
 	"Principado de Asturias",
 	"Islas Baleares",
