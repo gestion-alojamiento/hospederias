@@ -401,3 +401,34 @@ input::focus {
   max-width: 100vw;
   padding: 1em;
 }
+
+.navbar-horizontal {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+/*  background-color: #333;*/
+}
+
+.navbar-horizontal li {
+  float: left;
+  margin-right: .2rem;
+}
+
+.navbar-horizontal li a {
+  display: block;
+  color: #111;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navbar-horizontal li a:hover:not(.active) {
+  background-color: #111;
+  color: #ccc;
+}
+
+.navbar-horizontal .active {
+  background-color: #009879;
+  color: white;
+}
