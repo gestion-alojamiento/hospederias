@@ -1,13 +1,32 @@
 CHANGELOG
 
+## V2.1.2
+
+  - Separado el código de configuración en 'config.js' del 'index.js'
+  - Mejora en el menú de navegación de Huesped
+  - Mejora en las rutas de router.js
+  - Nueva apiKey
+  - Formularios de Huesped alta y edición ahora son iguales
+
+## v2.1.1
+
+  - Agregados nuevos documentos con corrección de la fecha de expedición
+
+## v2.1
+
+  - Corrige la fecha de expedición de los documentos (resta 10 años)
+  - Después de validar datos se queda el foco en el botón de guardar
+  
 ## v2
 
   - Eliminados módulos obsoletos (hospederíasLista y huespedEdita)
   - Código un poco más legible y limpio
+
 ## v1
 
   - Ejecutable sin necesidad de descargar archivos del directorio padre
   - CDNs de producción (vue + vue-router)
+
 ## v0.0.3
 
   - Elimina huéspedes (falta refrescar listado después de eliminar el registro)
