@@ -12,10 +12,10 @@ const menuPrincipal = {
           <router-link to="/huesped/lista">Listado huéspedes</router-link> | 
         </span>
         <span v-if="opcion.huespedes" >
-          <router-link to="/huesped/hospederias">Hospederías</router-link> | 
+          <router-link :to="{ name: 'hospederias' }">Hospederías</router-link> | 
         </span>
         <span v-if="opcion.huespedes" >
-          <router-link to="/huesped/alta">Alta huéspedes</router-link> | 
+          <router-link :to="{ name: 'nuevoHuesped' }">Alta huéspedes</router-link> | 
         </span>
         <span v-if="opcion.leeme">
           <router-link to="/leeme">Leeme.md</router-link> |
