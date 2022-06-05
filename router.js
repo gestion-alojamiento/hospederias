@@ -4,6 +4,21 @@ const routes = [
 		component: Login
 	},
 	{
+		path: '/alta',
+		name: 'nuevoHuesped',
+		component: huespedFormulario
+	},
+	{
+		path: '/hospederias',
+		name: 'hospederias',
+		component: Hospederias
+	},
+	/**
+	*  Carga el módulo huesped
+	*  Este módulo tiene un menún de navegación propio y
+	*  otro 'router-view' donde se cargan los módulos
+	*/
+	{
 		path: '/huesped',
 		name: 'huesped',
 		component: Huesped,
@@ -34,7 +49,7 @@ const routes = [
 			},
 			{
 				path: 'hospederias',
-				name: 'hospederias',
+				name: 'huespedHospederias',
 				component: Hospederias
 			}
 		]
