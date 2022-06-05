@@ -10,22 +10,23 @@ const huespedFormulario = {
 			<fieldset>
 			
 				<div>
-					<label for="reservaNum">#Reserva</label>
+					<label for="reservaID">#Reserva</label>
                     <input type="text"
 						class="input-min"
-						v-model="reservaNum"
-						@input="() => (reservaNum = reservaNum.toUpperCase())"
-						id="reservaID">
+						v-model="reservaID"
+						@input="() => (reservaID = reservaID.toUpperCase())"
+						id="reservaID"
+						:disabled="bloqueaInput">
 						<span></span>
 				</div>
 				
 				<div>
-					<label for="habitacionNum">#Habitación</label>
+					<label for="habitacionID">#Habitación</label>
 					<input type="text"
 						class="input-min"
-						v-model="habitacionNum"
-						@input="() => (reservaNum = reservaNum.toUpperCase())"
-						id="habitacionNum">
+						v-model="habitacionID"
+						@input="() => (habitacionID = habitacionID.toUpperCase())"
+						id="habitacionID">
 						<span></span>
 				</div>
 				
@@ -83,9 +84,8 @@ const huespedFormulario = {
 								required>
 								<span></span>
 					</div>
-				
+
 			</fieldset>
-			
 			<fieldset>
 			
 					<div>
@@ -151,9 +151,9 @@ const huespedFormulario = {
 			</div>
 			
 				<div class="card-footer">
-					<router-link  to="/"
+					<router-link  to="/huesped/alta"
 						class="boton boton-alerta my-1"
-						@click="altaHuesped">
+						@click="accionFormulario">
 							💾 Guardar
 					</router-link>
                   
@@ -171,15 +171,17 @@ const huespedFormulario = {
 `,
 setup() {
 
+	let nuevoHuespedOBJ = {}
+	let bloqueaInput = false
+
 	/*
 	 * FORMULARIO
 	 * VALORES POR DEFECTO 
 	 * 
 	 */
 	 
-	const nacionalidad = ref(valorDeInicio.nacionalidad)
-	const provincia = ref(valorDeInicio.provincia)
-	
+	/* REACTIVOS */
+
 	const huesped = reactive({
 		nombre: '',
 		apellido1: '',
@@ -188,71 +190,83 @@ setup() {
 		numIdentificacion: '',
 		sexo: valorDeInicio.sexo,
 		fExpedicionDoc: '',
-		reservaNum: '',
-		habitacionNum: '',
+		reservaID: '',
+		habitacionID: '',
 		fNacimiento: '',
 		fEntrada: fecha.aInput(ayer)
 	})
 
+	/* NO REACTIVOS */
+	const nacionalidad = ref(valorDeInicio.nacionalidad)
+	const provincia = ref(valorDeInicio.provincia)
+	
+	/* ------------------------------------------------------------*/
+
 	/*
-	 * SELECCION DE DOCUMENTOS POR DEFECTO SEGÚN NACIONALIDAD
+	 * FUNCION DE ALTA
 	 * 
 	 */
+	 
+	async function accionFormulario() {
 
-	const documentosValidos = computed(() => {
-		if ( nacionalidad.value == 'ESPAÑA' ) {
-			huesped.tipoDocumento = "D"
-			return documentosObjES
-		}
-		else if ( paisesArrEU.includes(nacionalidad.value) ) {
-			huesped.tipoDocumento = "I"
-			return documentosObjEU
-		}
-		else {
-			huesped.tipoDocumento = "P"
-			return documentosObjOtros
-		}
-	})
+		try {
+			let error = await validaDatos(huesped)
+			
+			if ( error.length ) {
+				alert('Verifica los datos e inténtalo de nuevo')
+				console.log({error})
+				throw "No se puede enviar el formulario"
+			}
+
+			nuevoHuespedOBJ = {
+				"reservaID": huesped.reservaID,
+				"habitacionID": huesped.habitacionID,
+				"sexo": huesped.sexo,
+				"nombre": eliminaAcentos(huesped.nombre),
+				"apellido1": eliminaAcentos(huesped.apellido1),
+				"apellido2": eliminaAcentos(huesped.apellido2),
+				"nacionalidad": nacionalidad.value,
+				"tipoDocumento": huesped.tipoDocumento,
+				"numIdentificacion": limpiaCadena(huesped.numIdentificacion),
+				"fExpedicionDoc": fecha.inputACorta(huesped.fExpedicionDoc),
+				"fNacimiento": fecha.inputACorta(huesped.fNacimiento),
+				"fEntrada": fecha.inputACorta(huesped.fEntrada),
+				"nacionalidadIndex": ( paisesArr.indexOf(nacionalidad.value) +1 ),
+				"provincia": provincia.value,
+			}
+			
+			//nuevoHuesped(nuevoHuespedOBJ) && console.log( 'Enviando datos a FIREBASE: ')
+			await huespedDB.add({ ...nuevoHuespedOBJ, fecha: new Date() })
+			.then((docRef) => { console.log("Nuevo registro con id: ", docRef.id); })
+			.catch((error) => {
+				throw "Error al añadir nuevo registro: " + error
+			 });
+			
+			// Permite seleccionar que valores reseteo y que valores quiero que se queden con el valor actual
+			limpiaFormulario()
 		
-  /*
-   * DATOS FORMATEADOS
-   * 
-   */
+			// Coloca el foco en el campo del número de reserva
+			document.querySelector("#reservaID").focus();
 
-  const letraDNI = computed(() => {
-	  let n, l, L
-	  const cadena="TRWAGMYFPDXBNJZSQVHLCKET"
-	  n = huesped.numIdentificacion.slice(0, 8) % 23
-	  L = huesped.numIdentificacion.slice(-1)
-	  l = cadena.substring(n,n+1)
-	  return L == l ? false : l
+		} catch (e) {
+			console.log(e)
+			// Coloca el foco en el campo del número de reserva
+			document.querySelector(".boton-alerta").focus();
+		}
+	}
+  
+	const limpiaFormulario = () => {
+		huesped.nombre = ''
+		huesped.apellido1 = ''
+		huesped.apellido2 = ''
+		huesped.fNacimiento = ''
+		huesped.fExpedicionDoc= ''
+		huesped.numIdentificacion = ''
+		huesped.sexo = valorDeInicio.sexo // config.js
+	}
 
-	  })
-  /* ---------------------- */
+	// ----------------------------------
 
-  /**
-   * fechaID
-   * Modifica la fecha de expedición cuando se ha introducido la fecha de caducidad
-   * @param {string} f fecha en formato yyy-mm-dd
-   * @param {string} pais pais de expedición del documento del huésped
-   * @param {string} id Letra de identificación del tipo de documento del huésped
-   */
-   const fechaID = (f, pais, id) => {
-	let d = new Date(f)
-	const year = d.getFullYear();
-	const month = d.getMonth();
-	const day = d.getDate() + 1;
-	const fechaMenos10 = d.setFullYear(d.getFullYear() - 10)
-	if ( pais == "ALEMANIA" && id == "I" ) return new Date(year - 10, month, day + 1).toISOString().slice(0, 10);
-  /**
-   * FECHA CADUCIDAD MENOS 10 AÑOS
-   * VALIDO PARA:
-   * ESPAÑA D
-   * BELGICA I
-   */
-	return new Date(fechaMenos10).toISOString().split('T')[0];
-}
-  /* ------------------------------- */
 
 	/*
 	 * 
@@ -263,11 +277,19 @@ setup() {
 	const salir = ref([])
 
 	const validaDatos = ( { nombre, apellido1, apellido2, numIdentificacion, fExpedicionDoc, fEntrada, fNacimiento, tipoDocumento } ) => {
-		 salir.value = []
-		 if ( tipoDocumento == 'D' && letraDNI.value ) {
+		salir.value = []
+		
+		if ( tipoDocumento == 'D' ) {
+			 if ( ! apellido2 ) {
+				err = '¡Falta el segundo apellido!'
+				alert(err)
+				salir.value.push(err)
+			 }
+			if ( letraDNI.value ) {
 			err = 'La letra del DNI no es correcta. Debería ser: ' + letraDNI.value
 			alert(err)
 			salir.value.push(err)
+			}
 		}
 		if ( ! nombre || ! apellido1 ) {
 			err = '¡El nombre y apellidos son imprescindibles!'
@@ -307,84 +329,92 @@ setup() {
 		return salir.value	
 	}
 
+	/**
+	 * letraDNI
+	 * Devuelve '1' si la letra del DNI (último caracter) no coincide con la letra calculada
+	 * Si coinciden devuelve 'false'
+	 * MEJORA (si se puede):
+	 * Activar el 'computed()' sólo cuando el "tipoDocumento == 'D'"
+	 */
+	const letraDNI = computed(() => {
+		let n, l, L
+		const cadena="TRWAGMYFPDXBNJZSQVHLCKET"
+		n = huesped.numIdentificacion.slice(0, 8) % 23
+		L = huesped.numIdentificacion.slice(-1)
+		l = cadena.substring(n,n+1)
+		return L == l ? false : l
+		})
+	/* ---------------------- */
+
+	/**
+	 * fechaID
+	 * Modifica la fecha de expedición cuando se ha introducido la fecha de caducidad
+	 * @param {string} f fecha en formato yyy-mm-dd
+	 * @param {string} pais pais de expedición del documento del huésped
+	 * @param {string} id Letra de identificación del tipo de documento del huésped
+	 */
+	const fechaID = (f, pais, id) => {
+	let d = new Date(f)
+	const year = d.getFullYear();
+	const month = d.getMonth();
+	const day = d.getDate() + 1;
+	const fechaMenos10 = d.setFullYear(d.getFullYear() - 10)
+	/**
+	 * DOCUMENTOS QUE MUESTRAN FECHA DE CADUCIDAD EN EL FRENTE Y LA DE EXPEDICIÓN ATRÁS
+	 * Facilita introducir la fecha de expedición sin consultar el reverso
+	 */
+	if ( pais == "ALEMANIA" && id == "I" ) return new Date(year - 10, month, day + 1).toISOString().slice(0, 10);
+	if ( pais == "CROACIA" && id == "I" ) return new Date(year - 5, month).toISOString().slice(0, 10);
+
+	/**
+	 * DOCUMENTOS QUE TIENEN ELEMENTOS QUE DIFICULTAN LA CONSULTA DE LA FECHA DE EXPEDICIÓN
+	 */
+
+	// Falta confirmación
+	//	if ( pais == "ITALIA" && id == "P" ) return new Date(year - 10, month, day + 1).toISOString().slice(0, 10);
+	//	if ( pais == "FRANCIA" && id == "I" ) return new Date(year - 15, month, day + 1).toISOString().slice(0, 10);
+	//	if ( pais == "FRANCIA" && id == "P" ) return new Date(year - 15, month, day + 1).toISOString().slice(0, 10);
+
+	/**
+	 * FECHA CADUCIDAD MENOS 10 AÑOS
+	 * VALIDO PARA:
+	 * ESPAÑA D
+	 * BELGICA I
+	 */
+	return new Date(fechaMenos10).toISOString().split('T')[0];
+	}
+	/* ------------------------------- */
+
 	/*
-	 * FUNCION DE ALTA
+	 * SELECCION DE DOCUMENTOS POR DEFECTO SEGÚN NACIONALIDAD
 	 * 
 	 */
-	 
-	let nuevoHuespedOBJ = {}
-	
-	async function altaHuesped() {
 
-		try {
-			let error = await validaDatos(huesped)
-			
-			if ( error.length ) {
-				alert('Verifica los datos e inténtalo de nuevo')
-				console.log({error})
-				throw "No se puede enviar el formulario"
-			}
-
-			nuevoHuespedOBJ = {
-				"reservaID": huesped.reservaNum,
-				"habitacionID": huesped.habitacionNum,
-				"sexo": huesped.sexo,
-				"nombre": eliminaAcentos(huesped.nombre),
-				"apellido1": eliminaAcentos(huesped.apellido1),
-				"apellido2": eliminaAcentos(huesped.apellido2),
-				"nacionalidad": nacionalidad.value,
-				"tipoDocumento": huesped.tipoDocumento,
-				"numIdentificacion": limpiaCadena(huesped.numIdentificacion),
-				"fExpedicionDoc": fecha.inputACorta(huesped.fExpedicionDoc),
-				"fNacimiento": fecha.inputACorta(huesped.fNacimiento),
-				"fEntrada": fecha.inputACorta(huesped.fEntrada),
-				"nacionalidadIndex": ( paisesArr.indexOf(nacionalidad.value) +1 ),
-				"provincia": provincia.value,
-			}
-			
-			//nuevoHuesped(nuevoHuespedOBJ) && console.log( 'Enviando datos a FIREBASE: ')
-			await huespedDB.add({ ...nuevoHuespedOBJ, fecha: new Date() })
-			.then((docRef) => { console.log("Nuevo registro con id: ", docRef.id); })
-			.catch((error) => {
-				throw "Error al añadir nuevo registro: " + error
-			 });
-			
-			// Permite seleccionar que valores reseteo y que valores quiero que se queden con el valor actual
-			limpiaFormulario()
-		
-			// Coloca el foco en el campo del número de reserva
-			document.querySelector("#reservaID").focus();
-
-		} catch (e) {
-			console.log(e)
-			// Coloca el foco en el campo del número de reserva
-			document.querySelector(".boton-alerta").focus();
+	const documentosValidos = computed(() => {
+		if ( nacionalidad.value == 'ESPAÑA' ) {
+			huesped.tipoDocumento = "D"
+			return documentosObjES
 		}
-	}
-  
-  const limpiaFormulario = () => {
-	  huesped.nombre = ''
-	  huesped.apellido1 = ''
-	  huesped.apellido2 = ''
-	  huesped.fNacimiento = ''
-	  huesped.fExpedicionDoc= ''
-	  huesped.numIdentificacion = ''
-	  huesped.sexo = valorDeInicio.sexo
-  }
-
-// ----------------------------------
-
-
-
+		else if ( paisesArrEU.includes(nacionalidad.value) ) {
+			huesped.tipoDocumento = "I"
+			return documentosObjEU
+		}
+		else {
+			huesped.tipoDocumento = "P"
+			return documentosObjOtros
+		}
+	})
+		
   return {
     provinciasES,
     provincia,
     paisesArr,
     documentosValidos,
     nacionalidad,
-    altaHuesped,
+    accionFormulario,
     ...toRefs(huesped),
     letraDNI,
+	bloqueaInput
   }
 }
 }

@@ -16,7 +16,7 @@ const huespedFormularioEdita = {
 						v-model="reservaID"
 						@input="() => (reservaID = reservaID.toUpperCase())"
 						id="reservaID"
-						disabled>
+						:disabled="bloqueaInput">
 						<span></span>
 				</div>
 				
@@ -84,10 +84,8 @@ const huespedFormularioEdita = {
 								required>
 								<span></span>
 					</div>
-				
-			</fieldset>
-			
 
+			</fieldset>
 			<fieldset>
 			
 					<div>
@@ -111,6 +109,10 @@ const huespedFormularioEdita = {
 							maxlength="14"
 							required>
 							<span></span>
+					</div>
+					
+					<div v-if="tipoDocumento == 'D' && numIdentificacion.length > 7">
+						<span class="boton boton-alerta" style="padding: 1rem" v-if=" letraDNI "> {{ letraDNI }} </span>
 					</div>
 
 					<div>
@@ -150,7 +152,7 @@ const huespedFormularioEdita = {
 			</div>
 			
 				<div class="card-footer">
-					<router-link  to=""
+					<router-link  to="/huesped/alta"
 						class="boton boton-alerta my-1"
 						@click="accionFormulario">
 							💾 Guardar
@@ -181,6 +183,9 @@ const huespedFormularioEdita = {
 	  }
   },
   setup(props) {
+
+	let bloqueaInput = true
+
 	  
 	const fecha = new Fecha(new Date())
 	const ayer = fecha.ayer
@@ -278,9 +283,9 @@ const huespedFormularioEdita = {
 				"habitacionID": huesped.habitacionID,
 				"sexo": huesped.sexo,
 				// Datos formateados
-				"nombre": huesped.nombre,
-				"apellido1": huesped.apellido1,
-				"apellido2": huesped.apellido2,
+				"nombre": eliminaAcentos(huesped.nombre),
+				"apellido1": eliminaAcentos(huesped.apellido1),
+				"apellido2": eliminaAcentos(huesped.apellido2),
 				"nacionalidad": huesped.nacionalidad,
 				"tipoDocumento": huesped.tipoDocumento,
 				"numIdentificacion": huesped.numIdentificacion,
@@ -313,6 +318,22 @@ const huespedFormularioEdita = {
 		document.querySelector("#reservaID").focus();
 	}
 
+	/**
+	 * letraDNI
+	 * Devuelve '1' si la letra del DNI (último caracter) no coincide con la letra calculada
+	 * Si coinciden devuelve 'false'
+	 * MEJORA (si se puede):
+	 * Activar el 'computed()' sólo cuando el "tipoDocumento == 'D'"
+	 */
+	 const letraDNI = computed(() => {
+		let n, l, L
+		const cadena="TRWAGMYFPDXBNJZSQVHLCKET"
+		n = huesped.numIdentificacion.slice(0, 8) % 23
+		L = huesped.numIdentificacion.slice(-1)
+		l = cadena.substring(n,n+1)
+		return L == l ? false : l
+		})
+	/* ---------------------- */
 
 //    const modificaHuesped = (OBJ, id) => huespedDB.doc(id).update(OBJ);
 
@@ -324,7 +345,9 @@ const huespedFormularioEdita = {
 		provinciasES,
 		...param,
 		accionFormulario,
-		test
+		letraDNI,
+		test,
+		bloqueaInput
 	}
   }
 }
