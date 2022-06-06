@@ -11,8 +11,8 @@ const Hospederias = {
   	<fieldset>
 		<label for="filtro">Fecha de Entrada</label>
 		<input v-model="filtro" type="date" id="filtro"/>
-		<boton-hospederias-copiar :data="dataFiltrada" text="Copiar Todos" code="CODIGO.md" />
-		<boton-hospederias-copiar v-if="subir.length > 0" :data="subeArray" text="Copiar Selección" code="CODIGO.md" />
+		<boton-hospederias-copiar :data="dataFiltrada" identificador="Todos" code="CODIGO.md" />
+		<boton-hospederias-copiar v-if="subir.length > 0" :data="subeArray" identificador="Selección" code="CODIGO.md" />
 	</fieldset>
 	
 	<base-huespedes-lista :data="dataFiltrada" @subeHospederias="hospederiasRecibidas" seleccionar />
@@ -87,13 +87,20 @@ const Hospederias = {
 	  * la función se llama desde un watch()
 	  * 
 	  */
-	  
-	 const subir = ref([])
-	 	  
+	  	 	  
+	 /**
+	  * hospederiasRecibidas
+	  * Recibe los id de los huéspedes seleccionados en la lista principal
+	  * Luego los copia en la variable 'subir'
+	  */
+	  const subir = ref([])
+
 	  const hospederiasRecibidas = (event) => {
 		  console.log('hospederiasRecibidas: ', event)
 		  subir.value = event
 	  }
+	  /* ----------------------- */
+
 	  
 	 const subeArray = ref([])	  
      const construyeArray = (obj) => {
