@@ -7,18 +7,22 @@ const huespedLista = {
   template: `
   <h3>Lista Huéspedes</h3>
 	<fieldset>
-		<label for="nacionalidad">Nacionalidad</label>
-		<input v-model="filtro.nacionalidad" />
+		<label for="nacionalidad">Nacionalidad:</label>
+		<input id="nacionalidad" v-model="filtro.nacionalidad" />
 	</fieldset>
 	<fieldset class="row">
-		<div>
-			<label for="nombre">Nombre</label>
-			<input v-model="filtro.nombre" />
-		</div>
-		<div>
-			<label for="apellido1">Apellido</label>
-			<input v-model="filtro.apellido1" />
-		</div>
+			<label for="nombre">Nombre:</label>
+			<input id="nombre" v-model="filtro.nombre" />
+
+			<label for="apellido1">Apellido:</label>
+			<input id="apellido1" v-model="filtro.apellido1" />
+	</fieldset>
+	<fieldset class="row">
+			<label for="apartamento">Apartamento:</label>
+			<input id="apartamento" v-model="filtro.habitacionID" />
+
+			<label for="reserva">Reserva:</label>
+			<input id="reserva" v-model="filtro.reservaID" />
 	</fieldset>
   
   <table class="styled-table">
@@ -36,7 +40,7 @@ const huespedLista = {
 			<th>Eliminar</th>
         </tr>
     </thead>
-    <tbody v-if="fitroVacio">
+    <tbody v-if=" ! filtroVacio">
         <tr
 			style="cursor: pointer"
 			v-for="{fEntrada, nombre, apellido1, apellido2, nacionalidad, tipoDocumento, numIdentificacion, habitacionID, reservaID, subido, id} in dataFiltrada"
@@ -63,12 +67,14 @@ const huespedLista = {
 		nacionalidad: '',
 		nombre: '',
 		apellido1: '',
+		habitacionID: '',
+		reservaID: '',
 	})
 	
 	
-	const fitroVacio = computed(() => {
-		if ( filtro.nacionalidad || filtro.nombre || filtro.apellido1 ) return true
-		return false
+	const filtroVacio = computed(() => {
+		if ( filtro.nacionalidad || filtro.nombre || filtro.apellido1 || filtro.habitacionID || filtro.reservaID ) return false
+		return true
 	})
 	
     // GET
@@ -87,9 +93,24 @@ const huespedLista = {
 		  })
 	  })
 
-      
+	  const filtroReservas = computed (() => {
+		return data.value.filter((x) => {
+			return x.reservaID
+				.toLowerCase()
+			  .indexOf(filtro.reservaID.toLowerCase()) != -1
+		})
+	})  
+
+      const dataFiltroHabitacion = computed (() => {
+		  return filtroReservas.value.filter((x) => {
+			  return x.habitacionID
+			  	.toLowerCase()
+				.indexOf(filtro.habitacionID.toLowerCase()) != -1
+		  })
+	  })
+
       const dataFiltroNombre = computed(() => {
-		  return data.value.filter((x) => {
+		  return dataFiltroHabitacion.value.filter((x) => {
 			  return x.nombre
 				.toLowerCase()
 				.indexOf(filtro.nombre.toLowerCase()) != -1
@@ -114,6 +135,6 @@ const huespedLista = {
 	  })
 	  
    
-    return { data, filtro, dataFiltrada, fitroVacio }
+    return { data, filtro, dataFiltrada, filtroVacio }
   }
 }
