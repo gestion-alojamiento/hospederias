@@ -1,5 +1,9 @@
 CHANGELOG
 
+## v2.3
+
+  - Nuevos filtros de búsqueda: apartamento y reserva
+  
 ## v2.2
 
   - Arreglado el el componente botonHospederiasCopiar.js
