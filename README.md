@@ -25,7 +25,6 @@
 
 ## Pendiente
 
-  - Actualizar listado al eliminar un registro
   -	Añadir botón para pasar de modo _impresion_ a modo _normal_
   -	Nueva página con huéspedes separados por nacionalidad y por provincia. Pudiendo elegir por periodos de 7 días a partir de una fecha determinada
   - Selección de opciones en selects sin necesidad de teclear a toda prisa
