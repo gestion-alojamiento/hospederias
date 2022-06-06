@@ -1,5 +1,10 @@
 CHANGELOG
 
+## v2.2
+
+  - Arreglado el el componente botonHospederiasCopiar.js
+  - Ahora funciona la selección de registros a subir a hospederías.
+  
 ## V2.1.2
 
   - Separado el código de configuración en 'config.js' del 'index.js'
