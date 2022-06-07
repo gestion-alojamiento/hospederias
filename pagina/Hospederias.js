@@ -68,10 +68,16 @@ const Hospederias = {
 		})
 	  }
       
+	  const filtroDocumentoValido = computed(() => {
+		  return data.value.filter((x) => {
+			  return x.tipoDocumento
+			  .indexOf("NV") == -1
+		  })
+	  })
       // FILTRO FECHA DE ENTRADA
       // Filtra los registros de huéspedes según la fecha de entrada: fEntrada
       const dataFiltrada = computed(() => {
-		  return data.value.filter((x) => {
+		  return filtroDocumentoValido.value.filter((x) => {
 			  return x.fEntrada
 				.indexOf(filtroFechaEntrada.value) != -1
 			})

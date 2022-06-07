@@ -80,17 +80,20 @@ const valorPorDefecto = {
 const documentosObjES = {
     "D": "DNI",
     "P": "PASAPORTE",
-    "C": "PERMISO CONDUCIR ESPAÑOL"
+    "C": "PERMISO CONDUCIR ESPAÑOL",
+    "NV": "NO VÁLIDO"
   }
   // Se muestra sólo a nacionalizados dentro de la UE
   const documentosObjEU = {
     "P": "PASAPORTE",
     "I": "DOCUMENTO DE IDENTIDAD DE LA UE",
-    "N": "NIE O TARJETA ESPAÑOLA DE EXTRANJEROS"
+    "N": "NIE O TARJETA ESPAÑOLA DE EXTRANJEROS",
+    "NV": "NO VÁLIDO"
   }
   // Se muestra a todos menos a los españoles
   const documentosObjOtros = {
     "P": "PASAPORTE",
     "N": "NIE O TARJETA ESPAÑOLA DE EXTRANJEROS",
-    "X": "PERMISO DE RESIDENCIA DE ESTADO MIEMBRO DE LA UE"
+    "X": "PERMISO DE RESIDENCIA DE ESTADO MIEMBRO DE LA UE",
+    "NV": "NO VÁLIDO"
   }

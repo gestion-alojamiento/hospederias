@@ -1,5 +1,9 @@
 CHANGELOG
 
+## v2.4
+
+  - Nuevo tipo de documento "NO VÁLIDO" que permite crear la ficha sin que se incluya en hospederías
+  
 ## v2.3
 
   - Nuevos filtros de búsqueda: apartamento y reserva

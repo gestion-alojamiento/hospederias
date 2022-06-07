@@ -6,12 +6,13 @@
   - Genera un código que insertar en la web de Hospederías de la Dirección General de la Policía para dar de alta a los huéspedes en su sistema
   - Consulta de huéspedes con posibilidad de utilizar filtros por nacionalidad, nombre y apellido
   - Valida datos como fecha de expedición de documento de identidad y letra del DNI
+  - Posibilidad de dar de alta a huéspedes con documentos de identidad no válidos (se filtran al generar las hospederías)
 
 ## Instalación
 
   - Cambiar de nombre al archivo firebase-ejemplo.js -> firebase.js
   - Añadir los datos de nuestro proyecto en firebase al archivo firebase.js
-  - Crear la base de datos 'firestore database' con la estructura: alojamiento -> <Establecimiento> -> huesped 
+  - Crear la base de datos 'firestore database' con la estructura: alojamiento -> \<Establecimiento\> -> huesped 
   
 ## Tecnologías
 
